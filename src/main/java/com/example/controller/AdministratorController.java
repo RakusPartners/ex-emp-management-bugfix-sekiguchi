@@ -72,7 +72,7 @@ public class AdministratorController {
 	 * 管理者情報を登録します.
 	 * 
 	 * @param form 管理者情報用フォーム
-	 * @return ログイン画面へリダイレクト
+	 * @return reinsert()へリダイレクト
 	 */
 	@PostMapping("/insert")
 	public String insert(@Validated InsertAdministratorForm form,BindingResult result,Model model) {
@@ -86,7 +86,11 @@ public class AdministratorController {
 		administratorService.insert(administrator);
 		return "redirect:/reinsert";
 }
-
+/**
+	 * 管理者情報を登録します.
+	 * 
+	 * @return ログイン画面へリダイレクト
+	 */
 	@RequestMapping("/reinsert")
 		public String reinsert() {
 
