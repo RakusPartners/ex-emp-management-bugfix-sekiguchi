@@ -88,7 +88,7 @@ public class AdministratorController {
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
 			return "redirect:/";
-		}else{//登録済→　（formを残して）
+		}else{//登録済
 			return "redirect:/";
 		}
 	}
