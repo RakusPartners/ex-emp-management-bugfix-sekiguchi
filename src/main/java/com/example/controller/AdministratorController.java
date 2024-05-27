@@ -85,11 +85,11 @@ public class AdministratorController {
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
 		return "redirect:/reinsert";
-	}
+}
 
 	@RequestMapping("/reinsert")
-	public String reinsert() {
-	
+		public String reinsert() {
+
 		return "redirect:/";
 	}
 
