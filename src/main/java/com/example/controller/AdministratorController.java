@@ -104,36 +104,9 @@ public class AdministratorController {
 			//エラー文をerrorに入れる
 			session.setAttribute("error", "パスワードが正しくありません");
 
-		   //if文の条件を記載するためのオブジェクト作成→スコープ格納 →オブジェクトを変えるのは×？
-			// Administrator administrator = new Administrator();
-			// administrator.setPassword(form.getPassword());
-			// administrator.setPassword2(form.getPassword2());
-			// session.setAttribute("administrator", administrator);
-			
 			return "redirect:/toInsert";
 			//redirectをしているのでmodelスコープだとなくなる
 		}
-
-		// String pass= form.getPassword();
-		// String pass2 = form.getPassword2();
-		// if(pass.equals(pass2)){
-		// 	result.rejectValue("password2","パスワードが正しくありません");
-		// }
-
-		
-		// エラーの手動追加
-			// FieldError fieldError = new FieldError(result.getObjectName(), "password2","パスワードが正しくありません");
-			// result.addError(fieldError);
-
-		//エラー文をerrorに入れる
-			// model.addAttribute("error", "パスワードが正しくありません");
-
-		//if文の条件を記載するためのオブジェクト作成→スコープ格納 →オブジェクトを変えるのは×？
-			// Administrator administrator = new Administrator();
-			// administrator.setPassword(form.getPassword());
-			// administrator.setPassword2(form.getPassword2());
-			// model.addAttribute("administrator", administrator);
-
 		
 	}
 
