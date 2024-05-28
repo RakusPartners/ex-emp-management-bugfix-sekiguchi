@@ -96,9 +96,9 @@ public class AdministratorController {
 				BeanUtils.copyProperties(form, administrator);
 				administratorService.insert(administrator);
 				return "redirect:/";
-		    //登録済
+		    //登録済 →管理者登録画面へ遷移
 			}else{
-				return "redirect:/";
+				return "redirect:/insert";
 			}
 		}else{
 			//returnで管理者登録画面まで戻るかつエラー文の記載
