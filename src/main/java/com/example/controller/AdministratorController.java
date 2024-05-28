@@ -84,11 +84,12 @@ public class AdministratorController {
 		//未登録：今まで通りinsert intoで追加
 		if(administratorService.findByMailAddress(form.getMailAddress())== null){//未登録
 			Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
+			// フォームからドメインにプロパティ値をコピー
+			BeanUtils.copyProperties(form, administrator);
+			administratorService.insert(administrator);
 			return "redirect:/";
-		}else{//登録済
+		//登録済
+		}else{
 			return "redirect:/";
 		}
 	}
