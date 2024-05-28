@@ -96,4 +96,30 @@ public class EmployeeController {
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
 	}
+
+	/**
+	 * 従業員情報を曖昧検索する
+	 * ・空文字検索→全件検索結果表示
+	 * ・指定した文字列が存在しない→「１件もありませんでした」のメッセージ＋全件検索結果表示
+	 */
+	@GetMapping("/member")
+	public String member(String name,Model model){
+
+		List<Employee> searchList = employeeService.findByKeyname(name);
+		List<Employee> allList = employeeService.showList();
+
+		model.addAttribute("allList",allList);
+		session.setAttribute("messe","１件もありませんでした");
+		model.addAttribute("searchList", searchList);
+
+		// if(name.equals(" ")){
+		// 	model.addAttribute("allList",allList);
+		// }else if(name.equals(null)){
+		// 	model.addAttribute("messe","１件もありませんでした");
+		// 	model.addAttribute("allList",allList);
+		// }else{
+		// 	model.addAttribute("searchList", searchList);
+		// }
+		return "employee/list";
+	}
 }

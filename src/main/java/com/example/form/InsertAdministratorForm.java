@@ -20,6 +20,9 @@ public class InsertAdministratorForm {
 	/** パスワード */
 	@NotBlank(message = "パスワードを入力してください")
 	private String password;
+	/** パスワード */
+	@NotBlank(message = "パスワードを入力してください")
+	private String password2;
 
 	public String getName() {
 		return name;
@@ -45,10 +48,20 @@ public class InsertAdministratorForm {
 		this.password = password;
 	}
 
+	public String getPassword2() {
+		return password2;
+	}
+
+	public void setPassword2(String password2) {
+		this.password2 = password2;
+	}
+
 	@Override
 	public String toString() {
 		return "InsertAdministratorForm [name=" + name + ", mailAddress=" + mailAddress + ", password=" + password
-				+ "]";
+				+ ", password2=" + password2 + "]";
 	}
+
+	
 
 }

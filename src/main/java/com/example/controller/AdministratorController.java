@@ -79,20 +79,34 @@ public class AdministratorController {
 		if(result.hasErrors()){
 			return toInsert(model);
 		}
-		/*登録済：ログイン画面に遷移
-		  未登録：今まで通りinsert intoで追加*/
-		if(administratorService.findByMailAddress(form.getMailAddress())== null){//未登録
-			Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
-			return "redirect:/";
-		//登録済
+
+		//エラー文を持たせ、スコープに格納→　それをHTMLでエラー文として表示させる
+		//フォームで取得した２つの値に対して、if文で処理を分岐
+		if(form.getPassword().equals(form.getPassword2())){
+		//いままで通りの動き
+			//登録済：ログイン画面に遷移
+			//未登録：今まで通りinsert intoで追加
+			//未登録
+			if(administratorService.findByMailAddress(form.getMailAddress())== null){
+				Administrator administrator = new Administrator();
+				// フォームからドメインにプロパティ値をコピー
+				BeanUtils.copyProperties(form, administrator);
+				administratorService.insert(administrator);
+				return "redirect:/";
+			}else{//登録
+				return "redirect:/";
+			}
 		}else{
-			return "redirect:/";
+			//returnで管理者登録画面まで戻るかつエラー文の記載
+			//エラー文をerrorに入れる
+			session.setAttribute("error", "パスワードが正しくありません");
+
+			return "redirect:/toInsert";
+			//redirectをしているのでmodelスコープだとなくなる
 		}
-	
+		
 	}
+
 
 
 	
