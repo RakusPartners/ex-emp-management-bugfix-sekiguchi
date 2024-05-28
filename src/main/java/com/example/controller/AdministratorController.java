@@ -79,18 +79,19 @@ public class AdministratorController {
 		if(result.hasErrors()){
 			return toInsert(model);
 		}
-
-		//登録済：ログイン画面に遷移
-		//未登録：今まで通りinsert intoで追加
+		/*登録済：ログイン画面に遷移
+		  未登録：今まで通りinsert intoで追加*/
 		if(administratorService.findByMailAddress(form.getMailAddress())== null){//未登録
 			Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
 			return "redirect:/";
-		}else{//登録済
+		//登録済
+		}else{
 			return "redirect:/";
 		}
+	
 	}
 
 
@@ -116,12 +117,17 @@ public class AdministratorController {
 	 */
 	@PostMapping("/login")
 	public String login(LoginForm form, RedirectAttributes redirectAttributes) {
+		//formで入力された情報をもとに、domainオブジェクトを生成　(メールとパスワードをキーにすべての管理者登録情報を取得)
 		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
+		//生成されたオブジェクトがまだない場合（ログインではなく、管理者登録しないといけないが、それがされてないのでログインが面に戻る）
 		if (administrator == null) {
 			redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return "redirect:/";
+		//すでに登録されている場合
+		}else{
+			session.setAttribute("administrator", administrator);
+			return "redirect:/employee/showList";
 		}
-		return "redirect:/employee/showList";
 	}
 
 	/////////////////////////////////////////////////////
