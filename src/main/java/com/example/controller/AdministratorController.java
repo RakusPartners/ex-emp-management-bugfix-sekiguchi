@@ -96,20 +96,24 @@ public class AdministratorController {
 				BeanUtils.copyProperties(form, administrator);
 				administratorService.insert(administrator);
 				return "redirect:/";
+
 		    //登録済 →管理者登録画面へ遷移
 			}else{
 				return "redirect:/insert";
+
 			}
 		}else{
 			//returnで管理者登録画面まで戻るかつエラー文の記載
 			//エラー文をerrorに入れる
 			session.setAttribute("error", "パスワードが正しくありません");
-
+      
 			return "administrator/insert";
+
 			//redirectをしているのでmodelスコープだとなくなる
 		}
 		
 	}
+
 
 
 	
@@ -134,12 +138,17 @@ public class AdministratorController {
 	 */
 	@PostMapping("/login")
 	public String login(LoginForm form, RedirectAttributes redirectAttributes) {
+		//formで入力された情報をもとに、domainオブジェクトを生成　(メールとパスワードをキーにすべての管理者登録情報を取得)
 		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
+		//生成されたオブジェクトがまだない場合（ログインではなく、管理者登録しないといけないが、それがされてないのでログインが面に戻る）
 		if (administrator == null) {
 			redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return "redirect:/";
+		//すでに登録されている場合
+		}else{
+			session.setAttribute("administrator", administrator);
+			return "redirect:/employee/showList";
 		}
-		return "redirect:/employee/showList";
 	}
 
 	/////////////////////////////////////////////////////

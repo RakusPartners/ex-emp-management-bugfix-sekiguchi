@@ -16,6 +16,8 @@ import com.example.domain.Employee;
 import com.example.form.UpdateEmployeeForm;
 import com.example.service.EmployeeService;
 
+import jakarta.servlet.http.HttpSession;
+
 /**
  * 従業員情報を操作するコントローラー.
  * 
@@ -29,6 +31,8 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private HttpSession session;
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
 	 * 
@@ -49,10 +53,31 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@GetMapping("/showList")
-	public String showList(Model model) {
+	public String showList() {
 		List<Employee> employeeList = employeeService.showList();
-		model.addAttribute("employeeList", employeeList);
+		session.setAttribute("employeeList", employeeList);
 		return "employee/list";
+	}
+
+	/**
+	 * 従業員情報を曖昧検索する
+	 * ・空文字検索→全件検索結果表示
+	 * ・指定した文字列が存在しない→「１件もありませんでした」のメッセージ＋全件検索結果表示
+	 */
+	@GetMapping("/searchList")
+	public String showList(String name) {
+			//idで全件検索
+		if(name.equals(" ")){
+			return "redirect:/employee/showList";
+		}else if(name.equals(null)){
+			session.setAttribute("name", null);
+			session.setAttribute("messe","１件もありませんでした");
+			return "redirect:/employee/showList";
+		}else{
+			List<Employee> searchList = employeeService.findByKeyname(name);
+			session.setAttribute("employeeList", searchList);
+			return "employee/list";
+		}
 	}
 
 	/////////////////////////////////////////////////////
@@ -65,6 +90,8 @@ public class EmployeeController {
 	 * @param model モデル
 	 * @return 従業員詳細画面
 	 */
+
+
 	@GetMapping("/showDetail")
 	public String showDetail(String id, Model model) {
 		Employee employee = employeeService.showDetail(Integer.parseInt(id));
@@ -92,4 +119,30 @@ public class EmployeeController {
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
 	}
+
+	/**
+	 * 従業員情報を曖昧検索する
+	 * ・空文字検索→全件検索結果表示
+	 * ・指定した文字列が存在しない→「１件もありませんでした」のメッセージ＋全件検索結果表示
+	 * 
+	 * 1：	all→/showList
+	 * 2:   findByKeyname →/findkey作成
+	 * 3:　　/member　でif文でreturnを使い分ける
+	 * @return 従業員一覧画面へリダイレクト
+	 */
+
+
+	// @GetMapping("/member")
+	// public String member(String name,Model model){
+	
+	// 	if(name.equals(" ")){
+	// 		return "redirect:/employee/showList";
+	// 	}else if(name.equals(null)){
+	// 		session.setAttribute("messe","１件もありませんでした");
+	// 		return "redirect:/employee/showList";
+	// 	}else{
+	// 		return "redirect:/employee/showList";
+	// 	}
+	// }
+	
 }

@@ -1,8 +1,6 @@
 package com.example.repository;
 
 import java.util.List;
-
-import org.checkerframework.checker.units.qual.t;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -59,9 +57,8 @@ public class AdministratorRepository {
 	 * @return 管理者情報 存在しない場合はnullを返します
 	 */
 	public Administrator findByMailAddressAndPassward(String mailAddress, String password) {
-		String sql = "select id,name,mail_address,password from administrators where mail_address= '" + mailAddress
-				+ "' and password='" + password + "'";
-		SqlParameterSource param = new MapSqlParameterSource();
+		String sql = "select id,name,mail_address,password from administrators where mail_address=:mailAddress and password=:passward";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress).addValue("password",password);
 		List<Administrator> administratorList = template.query(sql, param, ADMINISTRATOR_ROW_MAPPER);
 		if (administratorList.size() == 0) {
 			return null;
