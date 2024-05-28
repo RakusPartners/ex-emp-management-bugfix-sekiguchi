@@ -1,10 +1,13 @@
 package com.example.controller;
 
+import java.lang.reflect.Field;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -93,15 +96,19 @@ public class AdministratorController {
 				BeanUtils.copyProperties(form, administrator);
 				administratorService.insert(administrator);
 				return "redirect:/";
-			}else{//登録
-				return "redirect:/";
+
+		    //登録済 →管理者登録画面へ遷移
+			}else{
+				return "redirect:/insert";
+
 			}
 		}else{
 			//returnで管理者登録画面まで戻るかつエラー文の記載
 			//エラー文をerrorに入れる
 			session.setAttribute("error", "パスワードが正しくありません");
+      
+			return "administrator/insert";
 
-			return "redirect:/toInsert";
 			//redirectをしているのでmodelスコープだとなくなる
 		}
 		
