@@ -89,7 +89,8 @@ public class AdministratorController {
 		//いままで通りの動き
 			//登録済：ログイン画面に遷移
 			//未登録：今まで通りinsert intoで追加
-			if(administratorService.findByMailAddress(form.getMailAddress())== null){//未登録
+			//未登録
+			if(administratorService.findByMailAddress(form.getMailAddress())== null){
 				Administrator administrator = new Administrator();
 				// フォームからドメインにプロパティ値をコピー
 				BeanUtils.copyProperties(form, administrator);
@@ -100,13 +101,24 @@ public class AdministratorController {
 			}
 		}else{
 			//returnで管理者登録画面まで戻るかつエラー文の記載
-			String pass= form.getPassword();
-			String pass2 = form.getPassword2();
-			if(pass.equals(pass2)){
-				result.rejectValue("password2","error.password2","パスワードが正しくありません");
-			}
+			//エラー文をerrorに入れる
+			session.setAttribute("error", "パスワードが正しくありません");
+
+		   //if文の条件を記載するためのオブジェクト作成→スコープ格納 →オブジェクトを変えるのは×？
+			// Administrator administrator = new Administrator();
+			// administrator.setPassword(form.getPassword());
+			// administrator.setPassword2(form.getPassword2());
+			// session.setAttribute("administrator", administrator);
+			
 			return "redirect:/toInsert";
+			//redirectをしているのでmodelスコープだとなくなる
 		}
+
+		// String pass= form.getPassword();
+		// String pass2 = form.getPassword2();
+		// if(pass.equals(pass2)){
+		// 	result.rejectValue("password2","パスワードが正しくありません");
+		// }
 
 		
 		// エラーの手動追加
