@@ -59,6 +59,27 @@ public class EmployeeController {
 		return "employee/list";
 	}
 
+	/**
+	 * 従業員情報を曖昧検索する
+	 * ・空文字検索→全件検索結果表示
+	 * ・指定した文字列が存在しない→「１件もありませんでした」のメッセージ＋全件検索結果表示
+	 */
+	@GetMapping("/searchList")
+	public String showList(String name) {
+			//idで全件検索
+		if(name.equals(" ")){
+			return "redirect:/employee/showList";
+		}else if(name.equals(null)){
+			session.setAttribute("name", null);
+			session.setAttribute("messe","１件もありませんでした");
+			return "redirect:/employee/showList";
+		}else{
+			List<Employee> searchList = employeeService.findByKeyname(name);
+			session.setAttribute("employeeList", searchList);
+			return "employee/list";
+		}
+	}
+
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員詳細を表示する
 	/////////////////////////////////////////////////////
@@ -69,6 +90,8 @@ public class EmployeeController {
 	 * @param model モデル
 	 * @return 従業員詳細画面
 	 */
+
+
 	@GetMapping("/showDetail")
 	public String showDetail(String id, Model model) {
 		Employee employee = employeeService.showDetail(Integer.parseInt(id));
@@ -101,25 +124,25 @@ public class EmployeeController {
 	 * 従業員情報を曖昧検索する
 	 * ・空文字検索→全件検索結果表示
 	 * ・指定した文字列が存在しない→「１件もありませんでした」のメッセージ＋全件検索結果表示
+	 * 
+	 * 1：	all→/showList
+	 * 2:   findByKeyname →/findkey作成
+	 * 3:　　/member　でif文でreturnを使い分ける
+	 * @return 従業員一覧画面へリダイレクト
 	 */
-	@GetMapping("/member")
-	public String member(String name,Model model){
 
-		List<Employee> searchList = employeeService.findByKeyname(name);
-		List<Employee> allList = employeeService.showList();
 
-		model.addAttribute("allList",allList);
-		session.setAttribute("messe","１件もありませんでした");
-		model.addAttribute("searchList", searchList);
-
-		// if(name.equals(" ")){
-		// 	model.addAttribute("allList",allList);
-		// }else if(name.equals(null)){
-		// 	model.addAttribute("messe","１件もありませんでした");
-		// 	model.addAttribute("allList",allList);
-		// }else{
-		// 	model.addAttribute("searchList", searchList);
-		// }
-		return "employee/list";
-	}
+	// @GetMapping("/member")
+	// public String member(String name,Model model){
+	
+	// 	if(name.equals(" ")){
+	// 		return "redirect:/employee/showList";
+	// 	}else if(name.equals(null)){
+	// 		session.setAttribute("messe","１件もありませんでした");
+	// 		return "redirect:/employee/showList";
+	// 	}else{
+	// 		return "redirect:/employee/showList";
+	// 	}
+	// }
+	
 }
