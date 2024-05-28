@@ -67,7 +67,7 @@
               </li>
             </ul>
             <p class="navbar-text navbar-right">
-              <span th:text="${administratorName}">山田太郎</span
+              <span th:text="${employee.name}">山田太郎</span
               >さんこんにちは！ &nbsp;&nbsp;&nbsp;
               <a
                 href="../administrator/login.html"
@@ -111,7 +111,7 @@
                   <tr>
                     <th nowrap>従業員名</th>
                     <td>
-                      <span th:utext="${employee.name}">山田花子</span>
+                      <span th:text="${employee.name}">山田花子</span>
                     </td>
                   </tr>
                   <tr>
