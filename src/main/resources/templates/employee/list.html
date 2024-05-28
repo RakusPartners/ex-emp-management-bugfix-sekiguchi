@@ -98,6 +98,14 @@
 
           <!-- ここにモックのtable要素を貼り付けます -->
 
+          <!-- 従業員曖昧検索（６－２） -->
+          <form action="list.html" th:action="@{/employee/searchList}" method="post">
+              検索したい人の名前<br>
+              <span th:if="${session.name=null}" th:text=${session.messe} style="color: red;"></span>
+              <input type="text" name="name">
+              <button>検索</button>
+          </form>
+
           <table class="table table-striped">
             <thead>
               <tr>
@@ -107,13 +115,21 @@
               </tr>
             </thead>
             <tbody>
+
+              <!-- 
+              従業員情報を曖昧検索する
+               ・空文字検索→全件検索結果表示
+               ・指定した文字列が存在しない→「１件もありませんでした」のメッセージ＋全件検索結果表示
+               -->
+               <!-- <span th:if="${}" th:text="${}"></span> -->
+
               <tr th:each="employee : ${session.employeeList}">
                 <td>
                   <a
                     href="detail.html"
                     th:href="@{'/employee/showDetail?id=' + ${employee.id}}"
                   >
-                    <span th:text="${employee.name}">山田太郎</span>
+                  <span th:text="${session.administrator.name}">山田太郎</span>
                   </a>
                 </td>
                 <td>
