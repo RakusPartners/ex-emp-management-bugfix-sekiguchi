@@ -96,7 +96,8 @@ public class AdministratorController {
 				BeanUtils.copyProperties(form, administrator);
 				administratorService.insert(administrator);
 				return "redirect:/";
-			}else{//登録
+		    //登録済
+			}else{
 				return "redirect:/";
 			}
 		}else{
@@ -104,7 +105,7 @@ public class AdministratorController {
 			//エラー文をerrorに入れる
 			session.setAttribute("error", "パスワードが正しくありません");
 
-			return "redirect:/toInsert";
+			return "administrator/insert";
 			//redirectをしているのでmodelスコープだとなくなる
 		}
 		
