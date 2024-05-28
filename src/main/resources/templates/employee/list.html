@@ -99,8 +99,9 @@
           <!-- ここにモックのtable要素を貼り付けます -->
 
           <!-- 従業員曖昧検索（６－２） -->
-          <form th:action="@{/employee/member}" method="post">
+          <form action="list.html" th:action="@{/employee/searchList}" method="post">
               検索したい人の名前<br>
+              <span th:if="${session.name=null}" th:text=${session.messe} style="color: red;"></span>
               <input type="text" name="name">
               <button>検索</button>
           </form>
