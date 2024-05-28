@@ -1,10 +1,13 @@
 package com.example.controller;
 
+import java.lang.reflect.Field;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -80,17 +83,46 @@ public class AdministratorController {
 			return toInsert(model);
 		}
 
-		//登録済：ログイン画面に遷移
-		//未登録：今まで通りinsert intoで追加
-		if(administratorService.findByMailAddress(form.getMailAddress())== null){//未登録
-			Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
-			return "redirect:/";
-		}else{//登録済
-			return "redirect:/";
+		//エラー文を持たせ、スコープに格納→　それをHTMLでエラー文として表示させる
+		//フォームで取得した２つの値に対して、if文で処理を分岐
+		if(form.getPassword().equals(form.getPassword2())){
+		//いままで通りの動き
+			//登録済：ログイン画面に遷移
+			//未登録：今まで通りinsert intoで追加
+			if(administratorService.findByMailAddress(form.getMailAddress())== null){//未登録
+				Administrator administrator = new Administrator();
+				// フォームからドメインにプロパティ値をコピー
+				BeanUtils.copyProperties(form, administrator);
+				administratorService.insert(administrator);
+				return "redirect:/";
+			}else{//登録
+				return "redirect:/";
+			}
+		}else{
+			//returnで管理者登録画面まで戻るかつエラー文の記載
+			String pass= form.getPassword();
+			String pass2 = form.getPassword2();
+			if(pass.equals(pass2)){
+				result.rejectValue("password2","error.password2","パスワードが正しくありません");
+			}
+			return "redirect:/toInsert";
 		}
+
+		
+		// エラーの手動追加
+			// FieldError fieldError = new FieldError(result.getObjectName(), "password2","パスワードが正しくありません");
+			// result.addError(fieldError);
+
+		//エラー文をerrorに入れる
+			// model.addAttribute("error", "パスワードが正しくありません");
+
+		//if文の条件を記載するためのオブジェクト作成→スコープ格納 →オブジェクトを変えるのは×？
+			// Administrator administrator = new Administrator();
+			// administrator.setPassword(form.getPassword());
+			// administrator.setPassword2(form.getPassword2());
+			// model.addAttribute("administrator", administrator);
+
+		
 	}
 
 
